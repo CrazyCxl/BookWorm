@@ -1,4 +1,4 @@
-package com.cxl.bookworm;
+package com.cxl.bookworm.search;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,9 +11,10 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.cxl.bookbase.Book;
 import com.cxl.bookworm.R;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements BooksFragment.OnBooksFragmentInteractionListener {
 
     private final String LOG_TAG = "Search Activity Log:";
     @Override
@@ -30,8 +31,9 @@ public class SearchActivity extends AppCompatActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     // TODO do something
                     Log.i(LOG_TAG,v.getText().toString());
-//                    getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.search_page,new )
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.search_page,new BooksFragment())
+                            .commit();
                     handled = true;
                 }
                 return handled;
@@ -50,5 +52,10 @@ public class SearchActivity extends AppCompatActivity {
             break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBooksSelect(Book book) {
+        Log.i(LOG_TAG,"onBooksSelect "+book.getName());
     }
 }
