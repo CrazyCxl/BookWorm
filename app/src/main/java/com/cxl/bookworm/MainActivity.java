@@ -1,13 +1,10 @@
 package com.cxl.bookworm;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.cxl.bookbase.Book;
 import com.cxl.bookbase.BooksAdapter;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import android.view.View;
 
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -90,16 +87,9 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
+        if (id == R.id.nav_search) {
+            Intent intent = new Intent( getApplicationContext(), SearchActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_send) {
 
         }
