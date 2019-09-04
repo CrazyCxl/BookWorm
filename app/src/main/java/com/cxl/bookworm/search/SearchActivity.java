@@ -13,32 +13,26 @@ import android.widget.TextView;
 
 import com.cxl.bookbase.Book;
 import com.cxl.bookworm.R;
+import com.cxl.bookworm.SearchFragment;
 
-public class SearchActivity extends AppCompatActivity implements BooksFragment.OnBooksFragmentInteractionListener {
+public class SearchActivity extends AppCompatActivity
+        implements BooksFragment.OnBooksFragmentInteractionListener , SearchFragment.OnSearchFragmentInteractionListener {
 
     private final String LOG_TAG = "Search Activity Log:";
+    private SearchFragment searchFragment;
+    private BooksFragment booksFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        EditText editText = (EditText) findViewById(R.id.editText);
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    // TODO do something
-                    Log.i(LOG_TAG,v.getText().toString());
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.search_page,new BooksFragment())
-                            .commit();
-                    handled = true;
-                }
-                return handled;
-            }
-        });
+        if(searchFragment == null){
+            searchFragment = new SearchFragment();
+        }
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.search_page,searchFragment)
+                .commit();
     }
 
     @Override
@@ -57,5 +51,19 @@ public class SearchActivity extends AppCompatActivity implements BooksFragment.O
     @Override
     public void onBooksSelect(Book book) {
         Log.i(LOG_TAG,"onBooksSelect "+book.getName());
+    }
+
+    @Override
+    public void onSearchKeyInput(String name) {
+        Log.i(LOG_TAG,"onSearchKeyInput "+name);
+        if(booksFragment == null){
+            booksFragment = new BooksFragment();
+        }
+        if(searchFragment.isAdded()){
+            getSupportFragmentManager().beginTransaction().hide(searchFragment).commit();
+        }
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.search_page,booksFragment)
+                .commit();
     }
 }
