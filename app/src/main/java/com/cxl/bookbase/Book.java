@@ -1,8 +1,15 @@
 package com.cxl.bookbase;
 
+import com.cxl.webbase.Website;
+
 public class Book {
     private String name;
-    private WebsiteInfo websitInfo;
+    private Website websit;
+
+    public Book(String name, Website websit){
+        this.name = name;
+        this.websit = websit;
+    }
 
     public String getName() {
         return name;
@@ -12,11 +19,11 @@ public class Book {
         this.name = name;
     }
 
-    public WebsiteInfo getWebsitInfo() {
-        return websitInfo;
+    public Website getWebsit() {
+        return websit;
     }
 
-    public void setWebsitInfo(WebsiteInfo websitInfo) {
-        this.websitInfo = websitInfo;
+    public void setWebsit(Website websit) {
+        this.websit = websit;
     }
 }

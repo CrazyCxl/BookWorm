@@ -10,13 +10,15 @@ import android.widget.TextView;
 
 import com.cxl.bookworm.R;
 
+import java.util.List;
+
 public class BooksAdapter extends BaseAdapter {
 
     private final Context mContext;
-    private final Book[] books;
+    private final  List<Book> books;
 
     // 1
-    public BooksAdapter(Context context, Book[] books) {
+    public BooksAdapter(Context context, List<Book> books) {
         this.mContext = context;
         this.books = books;
     }
@@ -24,7 +26,7 @@ public class BooksAdapter extends BaseAdapter {
     // 2
     @Override
     public int getCount() {
-        return books.length;
+        return books.size();
     }
 
     // 3
@@ -42,7 +44,7 @@ public class BooksAdapter extends BaseAdapter {
     // 5
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Book book = books[position];
+        final Book book = books.get(position);
         // 2
         if (convertView == null) {
             final LayoutInflater layoutInflater = LayoutInflater.from(mContext);

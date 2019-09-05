@@ -22,6 +22,9 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.widget.GridView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -40,11 +43,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        Book[] books = new Book[10];
-        for(int i =0;i<10;i++){
-            Book b = new Book();
-            books[i] = b;
-        }
+        List<Book> books = new ArrayList<Book>();
         GridView gridView = (GridView)findViewById(R.id.gridview);
         BooksAdapter booksAdapter = new BooksAdapter(this, books);
         gridView.setAdapter(booksAdapter);

@@ -2,6 +2,9 @@ package com.cxl.bookworm.search;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +14,24 @@ import com.cxl.bookbase.Book;
 import com.cxl.bookworm.R;
 import com.cxl.bookworm.search.BooksFragment.OnBooksFragmentInteractionListener;
 import com.cxl.manager.web.WebVisiter;
+import com.cxl.webbase.Website;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Book} and makes a call to the
  * specified {@link OnBooksFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyBooksRecyclerViewAdapter extends RecyclerView.Adapter<MyBooksRecyclerViewAdapter.ViewHolder> implements WebVisiter.WebVisitoerListener {
+public class MyBooksRecyclerViewAdapter extends RecyclerView.Adapter<MyBooksRecyclerViewAdapter.ViewHolder> implements Website.WebsiteListener {
 
     private ArrayList<Book> mBooks;
     private final OnBooksFragmentInteractionListener mListener;
     private WebVisiter webVisiter;
+    private Handler handler;
+
+    private final int UPDATE_ITEM = 0;
 
     public MyBooksRecyclerViewAdapter(String name, OnBooksFragmentInteractionListener listener) {
         webVisiter = new WebVisiter(this);
@@ -32,6 +39,19 @@ public class MyBooksRecyclerViewAdapter extends RecyclerView.Adapter<MyBooksRecy
         mListener = listener;
         mBooks = new ArrayList<>();
         webVisiter.searchBooks(name);
+        handler = new Handler(Looper.getMainLooper()){
+            @Override
+            public void handleMessage(Message inputMessage) {
+                Book book = (Book) inputMessage.obj;
+                switch (inputMessage.what) {
+                    case UPDATE_ITEM:
+                        notifyItemInserted(mBooks.size() - 1);
+                        break;
+                    default:
+                        super.handleMessage(inputMessage);
+                }
+            }
+        };
     }
 
     @Override
@@ -42,18 +62,16 @@ public class MyBooksRecyclerViewAdapter extends RecyclerView.Adapter<MyBooksRecy
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mItem = mBooks.get(position);
         holder.mNameView.setText(mBooks.get(position).getName());
-        holder.mContentView.setText(mBooks.get(position).getWebsitInfo().getName());
+        holder.mContentView.setText(mBooks.get(position).getWebsit().getName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onBooksSelect(new Book());
+                    mListener.onBooksSelect(holder.mItem);
                 }
             }
         });
@@ -67,7 +85,8 @@ public class MyBooksRecyclerViewAdapter extends RecyclerView.Adapter<MyBooksRecy
     @Override
     public void onBookSearched(Book book) {
         mBooks.add(book);
-        notifyItemInserted(mBooks.size() - 1);
+        Message completeMessage = handler.obtainMessage(UPDATE_ITEM, book);
+        completeMessage.sendToTarget();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
