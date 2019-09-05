@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.cxl.bookbase.Book;
 import com.cxl.bookworm.R;
 import com.cxl.bookworm.search.BooksFragment.OnBooksFragmentInteractionListener;
-import com.cxl.manager.WebVisiter;
+import com.cxl.manager.web.WebVisiter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,8 +5,7 @@ public class Book {
     private WebsiteInfo websitInfo;
 
     public String getName() {
-//        return name;
-        return "cxl";
+        return name;
     }
 
     public void setName(String name) {
