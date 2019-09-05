@@ -10,23 +10,28 @@ import android.widget.TextView;
 import com.cxl.bookbase.Book;
 import com.cxl.bookworm.R;
 import com.cxl.bookworm.search.BooksFragment.OnBooksFragmentInteractionListener;
-import com.cxl.bookworm.search.dummy.DummyContent.DummyItem;
+import com.cxl.manager.WebVisiter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Book} and makes a call to the
  * specified {@link OnBooksFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyBooksRecyclerViewAdapter extends RecyclerView.Adapter<MyBooksRecyclerViewAdapter.ViewHolder> {
+public class MyBooksRecyclerViewAdapter extends RecyclerView.Adapter<MyBooksRecyclerViewAdapter.ViewHolder> implements WebVisiter.WebVisitoerListener {
 
-    private final List<DummyItem> mValues;
+    private ArrayList<Book> mBooks;
     private final OnBooksFragmentInteractionListener mListener;
+    private WebVisiter webVisiter;
 
-    public MyBooksRecyclerViewAdapter(List<DummyItem> items, OnBooksFragmentInteractionListener listener) {
-        mValues = items;
+    public MyBooksRecyclerViewAdapter(String name, OnBooksFragmentInteractionListener listener) {
+        webVisiter = new WebVisiter(this);
+        //mBooks = items;
         mListener = listener;
+        mBooks = new ArrayList<>();
+        webVisiter.searchBooks(name);
     }
 
     @Override
@@ -38,9 +43,9 @@ public class MyBooksRecyclerViewAdapter extends RecyclerView.Adapter<MyBooksRecy
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mItem = mBooks.get(position);
+        holder.mNameView.setText(mBooks.get(position).getName());
+        holder.mContentView.setText(mBooks.get(position).getWebsitInfo().getName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,19 +61,25 @@ public class MyBooksRecyclerViewAdapter extends RecyclerView.Adapter<MyBooksRecy
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mBooks.size();
+    }
+
+    @Override
+    public void onBookSearched(Book book) {
+        mBooks.add(book);
+        notifyItemInserted(mBooks.size() - 1);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
+        public final TextView mNameView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public Book mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
+            mNameView = (TextView) view.findViewById(R.id.item_name);
             mContentView = (TextView) view.findViewById(R.id.content);
         }
 

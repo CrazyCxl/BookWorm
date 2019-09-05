@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 
 import com.cxl.bookbase.Book;
 import com.cxl.bookworm.R;
-import com.cxl.bookworm.search.dummy.DummyContent;
 
 import java.util.List;
 
@@ -72,7 +71,7 @@ public class BooksFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyBooksRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyBooksRecyclerViewAdapter(getArguments().getString("searchName"), mListener));
         }
         return view;
     }

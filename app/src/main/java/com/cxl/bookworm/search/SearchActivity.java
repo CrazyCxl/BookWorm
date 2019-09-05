@@ -62,6 +62,10 @@ public class SearchActivity extends AppCompatActivity
         if(searchFragment.isAdded()){
             getSupportFragmentManager().beginTransaction().hide(searchFragment).commit();
         }
+
+        Bundle bundle = new Bundle();
+        bundle.putString("searchName", name);
+        booksFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.search_page,booksFragment)
                 .commit();
